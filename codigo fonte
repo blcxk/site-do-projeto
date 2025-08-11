@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SafeWatch | Relógio GPS com Botão do Pânico</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #0a0a1a;
+            color: #e0e0e0;
+            line-height: 1.6;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            padding: 2rem;
+            text-align: center;
+            border-bottom: 1px solid #1a1a2e;
+        }
+        
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: #fff;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 10px rgba(100, 149, 237, 0.7);
+        }
+        
+        .tagline {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-bottom: 1rem;
+        }
+        
+        nav {
+            display: flex;
+            justify-content: center;
+            background-color: #151528;
+            padding: 1rem;
+        }
+        
+        nav a {
+            color: #bbb;
+            text-decoration: none;
+            padding: 0.5rem 1.5rem;
+            margin: 0 0.5rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+        
+        nav a:hover {
+            background-color: #2a2a4a;
+            color: #fff;
+        }
+        
+        .hero {
+            height: 70vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 2rem;
+            background-image: linear-gradient(rgba(10, 10, 26, 0.7), rgba(10, 10, 26, 0.9)), 
+                              url('https://placehold.co/1920x1080/0a0a1a/302b63?text=SafeWatch+GPS+Panic+Watch&font=lora');
+            background-size: cover;
+            background-position: center;
+        }
+        
+        .hero h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: #fff;
+        }
+        
+        .hero p {
+            max-width: 800px;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+        
+        .btn {
+            display: inline-block;
+            background-color: #3a3a6e;
+            color: #fff;
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 1px solid #5757a0;
+        }
+        
+        .btn:hover {
+            background-color: #5757a0;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        
+        .services {
+            padding: 4rem 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .services h3 {
+            font-size: 1.8rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            color: #6495ed;
+        }
+        
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+        
+        .service-card {
+            background-color: #151528;
+            padding: 2rem;
+            border-radius: 8px;
+            transition: transform 0.3s ease;
+            border: 1px solid #2a2a4a;
+        }
+        
+        .service-card:hover {
+            transform: translateY(-10px);
+            border-color: #5757a0;
+        }
+        
+        .service-card h4 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: #fff;
+        }
+        
+        footer {
+            background-color: #0a0a14;
+            padding: 2rem;
+            text-align: center;
+            border-top: 1px solid #1a1a2e;
+            margin-top: 2rem;
+        }
+        
+        footer p {
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+        
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            nav a {
+                margin: 0.3rem 0;
+                width: 100%;
+                text-align: center;
+            }
+            
+            .hero h2 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">SAFEWATCH</div>
+        <p class="tagline">Proteção pessoal ao alcance de um toque</p>
+    </header>
+    
+    <nav>
+        <a href="#">Início</a>
+        <a href="#">Como Funciona</a>
+        <a href="#">Planos</a>
+        <a href="#">Aplicativo</a>
+
+    </nav>
+    
+    <section class="hero">
+        <h2>Sua Segurança em Primeiro Lugar</h2>
+        <p>O SafeWatch combina tecnologia vestível com segurança pessoal - GPS ativo, botão do pânico silencioso, detector de queda e alerta de emergência para situações de risco como sequestro, violência ou assédio.</p>
+        <a href="#" class="btn">Saiba Mais</a>
+    </section>
+    
+    <section class="services">
+        <h3>Recursos do SafeWatch</h3>
+        <div class="services-grid">
+            <div class="service-card">
+                <h4>Botão do Pânico</h4>
+                <p>Ativação rápida que envia sua localização GPS e alerta para contatos de emergência e autoridades.</p>
+            </div>
+            <div class="service-card">
+                <h4>Rastreamento GPS</h4>
+                <p>Localização em tempo real e histórico de rotas para monitoramento constante de sua segurança.</p>
+            </div>
+            <div class="service-card">
+                <h4>Proteção Completa</h4>
+                <p>Monitoramento 24/7 com geofence, detector de movimentos bruscos, gravação automática de áudio em emergências e conexão direta com autoridades.</p>
+            </div>
+        </div>
+    </section>
+    
+    <footer>
+        <p>&copy; 2023 SafeWatch. Todos os direitos reservados. | Suporte Emergencial: 24h (11) 91234-5678</p>
+    </footer>
+</body>
+</html>
