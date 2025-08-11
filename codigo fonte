@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SafeWatch | Relógio GPS com Botão do Pânico</title>
+    <title>SPACESECURITY | Relógio GPS com Botão do Pânico</title>
     <style>
         * {
             margin: 0;
@@ -176,7 +176,7 @@
 </head>
 <body>
     <header>
-        <div class="logo">SAFEWATCH</div>
+        <div class="logo">SPACESECURITY</div>
         <p class="tagline">Proteção pessoal ao alcance de um toque</p>
     </header>
     
@@ -190,12 +190,12 @@
     
     <section class="hero">
         <h2>Sua Segurança em Primeiro Lugar</h2>
-        <p>O SafeWatch combina tecnologia vestível com segurança pessoal - GPS ativo, botão do pânico silencioso, detector de queda e alerta de emergência para situações de risco como sequestro, violência ou assédio.</p>
+        <p>O SPACESECURITY combina tecnologia vestível com segurança pessoal - GPS ativo, botão do pânico silencioso, detector de queda e alerta de emergência para situações de risco como sequestro, violência ou assédio.</p>
         <a href="#" class="btn">Saiba Mais</a>
     </section>
     
     <section class="services">
-        <h3>Recursos do SafeWatch</h3>
+        <h3>Recursos do SPACESECURITY</h3>
         <div class="services-grid">
             <div class="service-card">
                 <h4>Botão do Pânico</h4>
@@ -213,7 +213,7 @@
     </section>
     
     <footer>
-        <p>&copy; 2023 SafeWatch. Todos os direitos reservados. | Suporte Emergencial: 24h (11) 91234-5678</p>
+        
     </footer>
 </body>
 </html>
