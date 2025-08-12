@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SPACESECURITY | Relógio GPS com Botão do Pânico</title>
+    <style>
+        /* Reset básico */
+        * {
+          margin: 0;
+          padding: 0;
+          box-sizing: border-box;
+          font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+          background-color: #0a0a1a;
+          color: #e0e0e0;
+          line-height: 1.6;
+          padding: 2rem;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          min-height: 100vh;
+          overflow-x: hidden;
+        }
+
+        header {
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            padding: 2rem;
+            text-align: center;
+            border-bottom: 1px solid #1a1a2e;
+            width: 100%;
+            max-width: 1200px;
+            margin-bottom: 1rem;
+        }
+
+        .logo {
+            font-size: 2.5rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: #fff;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 0 10px rgba(100, 149, 237, 0.7);
+        }
+
+        .tagline {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-bottom: 1rem;
+        }
+
+        nav {
+            display: flex;
+            justify-content: center;
+            background-color: #151528;
+            padding: 1rem;
+            width: 100%;
+            max-width: 1200px;
+            margin-bottom: 2rem;
+            border-radius: 8px;
+        }
+
+        nav a {
+            color: #bbb;
+            text-decoration: none;
+            padding: 0.5rem 1.5rem;
+            margin: 0 0.5rem;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        nav a:hover,
+        nav a.active {
+            background-color: #5757a0;
+            color: #fff;
+        }
+
+        .hero {
+            height: 70vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 0 2rem;
+            background-image: linear-gradient(rgba(10, 10, 26, 0.7), rgba(10, 10, 26, 0.9)), 
+                              url('https://placehold.co/1920x1080/0a0a1a/302b63?text=SafeWatch+GPS+Panic+Watch&font=lora');
+            background-size: cover;
+            background-position: center;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 1200px;
+            margin-bottom: 2rem;
+        }
+
+        .hero h2 {
+            font-size: 2.5rem;
+            margin-bottom: 1.5rem;
+            color: #fff;
+        }
+
+        .hero p {
+            max-width: 800px;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+            color: #ddd;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: #3a3a6e;
+            color: #fff;
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            border: 1px solid #5757a0;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background-color: #5757a0;
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .services {
+            padding: 0 2rem 4rem;
+            max-width: 1200px;
+            width: 100%;
+            margin: 0 auto 2rem auto;
+        }
+
+        .services h3 {
+            font-size: 1.8rem;
+            margin-bottom: 2rem;
+            text-align: center;
+            color: #6495ed;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .service-card {
+            background-color: #151528;
+            padding: 2rem;
+            border-radius: 8px;
+            transition: transform 0.3s ease;
+            border: 1px solid #2a2a4a;
+            color: #ddd;
+        }
+
+        .service-card:hover {
+            transform: translateY(-10px);
+            border-color: #5757a0;
+        }
+
+        .service-card h4 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: #fff;
+        }
+
+        footer {
+            background-color: #0a0a14;
+            padding: 2rem;
+            text-align: center;
+            border-top: 1px solid #1a1a2e;
+            margin-top: auto;
+            width: 100%;
+            max-width: 1200px;
+            color: #999;
+        }
+
+        footer p {
+            opacity: 0.7;
+            font-size: 0.9rem;
+        }
+
+        /* Modal overlay para o conteúdo homeContent */
+        #modalOverlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+            overflow-y: auto;
+        }
+
+        #modalContent {
+            background-color: #151528;
+            border-radius: 8px;
+            max-width: 900px;
+            width: 100%;
+            max-height: 80vh;
+            overflow-y: auto;
+            padding: 2rem;
+            color: #ccc;
+            line-height: 1.7;
+            position: relative;
+        }
+
+        #modalContent h3 {
+            color: #6495ed;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        #modalContent p {
+            margin-bottom: 1.2rem;
+            font-size: 1.05rem;
+        }
+
+        /* Botão fechar modal */
+        #closeModalBtn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: transparent;
+            border: none;
+            font-size: 1.5rem;
+            color: #ccc;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        #closeModalBtn:hover {
+            color: #fff;
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            nav a {
+                margin: 0.3rem 0;
+                width: 100%;
+                text-align: center;
+            }
+            
+            .hero h2 {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">SPACESECURITY</div>
+        <p class="tagline">Proteção pessoal ao alcance de um toque</p>
+    </header>
+    
+    <nav>
+        <a href="#" id="homeLink" class="active">Início</a>
+        <a href="#" id="featuresLink">Recursos</a>
+        <a href="#">Planos</a>
+        <a href="#">Aplicativo</a>
+    </nav>
+    
+    <section class="hero" id="heroSection">
+        <h2>Sua Segurança em Primeiro Lugar</h2>
+        <p>O SPACESECURITY combina tecnologia vestível com segurança pessoal - GPS ativo, botão do pânico silencioso, detector de queda e alerta de emergência para situações de risco como sequestro, violência ou assédio.</p>
+        <a href="#" class="btn" id="btnFeatures">Saiba Mais</a>
+    </section>
+    
+    <section class="services tab-content" id="featuresContent" style="display: block;">
+        <h3>Recursos do SPACESECURITY</h3>
+        <div class="services-grid">
+            <div class="service-card">
+                <h4>Botão do Pânico</h4>
+                <p>Ativação rápida que envia sua localização GPS e alerta para contatos de emergência e autoridades.</p>
+            </div>
+            <div class="service-card">
+                <h4>Rastreamento GPS</h4>
+                <p>Localização em tempo real e histórico de rotas para monitoramento constante de sua segurança.</p>
+            </div>
+            <div class="service-card">
+                <h4>Proteção Completa</h4>
+                <p>Monitoramento 24/7 com geofence, detector de movimentos bruscos, gravação automática de áudio em emergências e conexão direta com autoridades.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modal para o conteúdo "homeContent" -->
+    <div id="modalOverlay">
+        <div id="modalContent">
+            <button id="closeModalBtn" aria-label="Fechar modal">&times;</button>
+            <h3>SPACESECURITY: Proteção Discreta e Efetiva para Mulheres e Crianças</h3>
+            <p>Em um mundo cada vez mais dinâmico, onde a segurança pessoal tornou-se uma preocupação constante, o SPACESECURITY chega para revolucionar a forma como mulheres e crianças se protegem em situações de risco. Pensado e desenvolvido especialmente para garantir proteção discreta, rápida e eficiente, o SPACESECURITY é um sistema de segurança pessoal que se apresenta como um relógio digital comum, com design moderno e neutro, para que ninguém perceba que ele é muito mais do que aparenta.</p>
+            <p>A tecnologia por trás do SPACESECURITY foi cuidadosamente projetada para atuar de forma silenciosa, garantindo que o usuário possa enviar um alerta de emergência sem chamar atenção, em momentos delicados em que qualquer exposição pode aumentar o perigo. Ao acionar o dispositivo, ele dispara um sinal imediato para contatos previamente cadastrados, além de poder alertar diretamente as autoridades ou serviços de emergência locais, acelerando o tempo de resposta e aumentando as chances de intervenção rápida.</p>
+            <p>Esse sistema não é apenas um gadget, mas um verdadeiro aliado na prevenção. Seu uso é indicado para mulheres que enfrentam rotinas com deslocamentos diários, trajetos à noite, encontros em locais pouco conhecidos, ou mesmo para mães que desejam garantir a segurança dos filhos quando eles estão sozinhos ou longe. Além disso, o SPACESECURITY é uma ferramenta essencial para crianças e adolescentes, oferecendo a tranquilidade que pais e responsáveis tanto desejam, com a certeza de que, em uma situação de emergência, um socorro está a um simples toque.</p>
+            <p>Com o SPACESECURITY, a segurança deixa de ser um conceito distante para se tornar uma realidade palpável, oferecendo autonomia, confiança e proteção para quem mais precisa. É a tranquilidade de saber que, mesmo em momentos difíceis, você não estará sozinha.</p>
+            <p>Porque a verdadeira segurança não está em ser visto, mas em estar protegido.</p>
+        </div>
+    </div>
+    
+    <footer>
+        <p>&copy; 2023 SPACESECURITY. Todos os direitos reservados.</p>
+    </footer>
+
+    <script>
+        const homeLink = document.getElementById('homeLink');
+        const featuresLink = document.getElementById('featuresLink');
+        const heroSection = document.getElementById('heroSection');
+        const btnFeatures = document.getElementById('btnFeatures');
+        const modalOverlay = document.getElementById('modalOverlay');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+
+        // Mostrar modal (conteúdo "home")
+        function openModal() {
+            modalOverlay.style.display = 'flex';
+            heroSection.style.filter = 'blur(4px)';
+            featuresLink.classList.remove('active');
+            homeLink.classList.add('active');
+        }
+
+        // Fechar modal
+        function closeModal() {
+            modalOverlay.style.display = 'none';
+            heroSection.style.filter = 'none';
+            homeLink.classList.remove('active');
+        }
+
+        // Mostrar seção recursos
+        function showFeatures() {
+            modalOverlay.style.display = 'none';
+            heroSection.style.display = 'none';
+            featuresLink.classList.add('active');
+            homeLink.classList.remove('active');
+        }
+
+        homeLink.addEventListener('click', e => {
+            e.preventDefault();
+            openModal();
+        });
+
+        featuresLink.addEventListener('click', e => {
+            e.preventDefault();
+            heroSection.style.display = 'flex';
+            showFeatures();
+        });
+
+        btnFeatures.addEventListener('click', e => {
+            e.preventDefault();
+            heroSection.style.display = 'none';
+            showFeatures();
+        });
+
+        closeModalBtn.addEventListener('click', e => {
+            e.preventDefault();
+            closeModal();
+        });
+
+        // Fechar modal clicando fora do conteúdo
+        modalOverlay.addEventListener('click', e => {
+            if (e.target === modalOverlay) {
+                closeModal();
+            }
+        });
+    </script>
+</body>
+</html>
