@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>SPACESECURITY | Relógio GPS com Botão do Pânico</title>
+<style>
+  /* Reset básico */
+  * {
+    margin: 0; padding: 0; box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+
+  body {
+    background: #0a0a1a;
+    color: #e0e0e0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Cabeçalho */
+  header {
+    background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+    padding: 2rem 1rem;
+    text-align: center;
+    border-bottom: 1px solid #1a1a2e;
+  }
+  header .logo {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: white;
+    letter-spacing: 2px;
+    text-shadow: 0 0 10px rgba(100,149,237,0.7);
+    margin-bottom: 0.3rem;
+  }
+  header .tagline {
+    font-size: 1.1rem;
+    opacity: 0.8;
+  }
+
+  /* Navegação */
+  nav {
+    background: #151528;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding: 1rem;
+    border-radius: 8px;
+    margin: 1rem auto;
+    max-width: 1200px;
+  }
+  nav a, nav button {
+    background: transparent;
+    border: none;
+    color: #bbb;
+    padding: 0.5rem 1.5rem;
+    text-decoration: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.3s ease;
+  }
+  nav a.active, nav a:hover, nav button:hover {
+    background: #5757a0;
+    color: white;
+  }
+  nav button#themeToggle {
+    background: #3a3a6e;
+    color: white;
+    border-radius: 50px;
+    padding: 0.5rem 1rem;
+  }
+
+  /* Seções - conteúdo das abas */
+  main {
+    flex-grow: 1;
+    max-width: 1200px;
+    margin: 0 auto 3rem;
+    padding: 0 1rem;
+    width: 100%;
+  }
+
+  section.tab-content {
+    display: none;
+    background: #151528;
+    border-radius: 8px;
+    padding: 2rem;
+    color: #ccc;
+    line-height: 1.6;
+  }
+  section.tab-content.active {
+    display: block;
+  }
+  h2, h3 {
+    color: #6495ed;
+    margin-bottom: 1rem;
+  }
+  ul {
+    margin-left: 1.2rem;
+  }
+  ul li {
+    margin-bottom: 0.6rem;
+  }
+  strong {
+    color: white;
+  }
+
+  /* Hero */
+  #heroSection p {
+    max-width: 700px;
+    margin-bottom: 1.5rem;
+  }
+  #heroSection {
+    text-align: center;
+  }
+
+  /* Botão geral */
+  .btn {
+    background: #3a3a6e;
+    color: white;
+    border: none;
+    padding: 0.8rem 2rem;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+  }
+  .btn:hover {
+    background: #5757a0;
+    transform: translateY(-3px);
+  }
+
+  /* Modal */
+  #modalOverlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.8);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+    z-index: 1000;
+    overflow-y: auto;
+  }
+  #modalOverlay.active {
+    display: flex;
+  }
+  #modalContent {
+    background: #151528;
+    max-width: 700px;
+    width: 100%;
+    border-radius: 10px;
+    padding: 2rem;
+    position: relative;
+    max-height: 80vh;
+    overflow-y: auto;
+    color: #ccc;
+  }
+  #modalCloseBtn {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: none;
+    border: none;
+    font-size: 2rem;
+    color: #ccc;
+    cursor: pointer;
+    font-weight: bold;
+  }
+
+  /* Newsletter */
+  #newsletter {
+    background: #1c1c3a;
+    padding: 2rem 1rem;
+    border-radius: 8px;
+    max-width: 600px;
+    margin: 2rem auto 0;
+    text-align: center;
+  }
+  #newsletter input[type="email"] {
+    padding: 0.8rem;
+    border-radius: 30px 0 0 30px;
+    border: none;
+    width: 65%;
+    font-size: 1rem;
+  }
+  #newsletter button {
+    padding: 0.8rem 1.5rem;
+    border-radius: 0 30px 30px 0;
+    border: none;
+    background: #6495ed;
+    color: white;
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+  }
+  #newsletter button:hover {
+    background: #4a71b8;
+  }
+
+  /* Botão voltar ao topo */
+  #backToTop {
+    position: fixed;
+    bottom: 40px;
+    right: 30px;
+    background: #3a3a6e;
+    border: none;
+    color: white;
+    padding: 0.8rem 1rem;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 1.2rem;
+    display: none;
+    z-index: 999;
+    box-shadow: 0 4px 8px rgba(55,55,110,0.7);
+    transition: background-color 0.3s ease;
+  }
+  #backToTop:hover {
+    background: #5757a0;
+  }
+
+  /* Rodapé */
+  footer {
+    background: #0a0a14;
+    color: #999;
+    padding: 2rem 1rem;
+    text-align: center;
+    border-top: 1px solid #1a1a2e;
+  }
+  footer .footer-section {
+    max-width: 1200px;
+    margin: 0 auto 1rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    gap: 2rem;
+    color: #bbb;
+  }
+  footer .footer-section div {
+    min-width: 180px;
+  }
+  footer h4 {
+    margin-bottom: 0.8rem;
+    color: #6495ed;
+  }
+  footer a {
+    color: #bbb;
+    text-decoration: none;
+  }
+  footer a:hover {
+    text-decoration: underline;
+  }
+  footer small {
+    display: block;
+    margin-top: 1rem;
+    opacity: 0.6;
+  }
+
+  /* Layout responsivo */
+  @media(max-width: 768px){
+    nav {
+      flex-direction: column;
+      align-items: center;
+    }
+    #newsletter input[type="email"] {
+      width: 100%;
+      border-radius: 30px;
+      margin-bottom: 1rem;
+    }
+    #newsletter button {
+      width: 100%;
+      border-radius: 30px;
+    }
+    footer .footer-section {
+      flex-direction: column;
+      align-items: center;
+    }
+  }
+
+  /* Modo claro */
+  body.light-mode {
+    background: #fefefe;
+    color: #222;
+  }
+  body.light-mode header {
+    background: linear-gradient(135deg, #c5d0f0, #a0a8d3, #b4bbd8);
+    border-bottom-color: #a5aed7;
+  }
+  body.light-mode header .logo {
+    color: #1a1a4a;
+    text-shadow: none;
+  }
+  body.light-mode header .tagline {
+    opacity: 0.9;
+  }
+  body.light-mode nav {
+    background: #dbe0f7;
+  }
+  body.light-mode nav a, body.light-mode nav button {
+    color: #525151;
+  }
+  body.light-mode nav a.active, body.light-mode nav a:hover, body.light-mode nav button:hover {
+    background: #a0a8d3;
+    color: white;
+  }
+  body.light-mode #heroSection {
+    color: #222;
+    background-image: linear-gradient(rgba(255,255,255,0.9), rgba(255,255,255,0.9)), url('https://placehold.co/1920x1080/ccccff/8888cc?text=SafeWatch+GPS+Panic+Watch&font=lora');
+    background-size: cover;
+    background-position: center;
+    border-radius: 8px;
+  }
+  body.light-mode .tab-content {
+    background: #f7f7fc;
+    color: #222;
+  }
+  body.light-mode .service-card {
+    background: #e7e9f8;
+    color: #333;
+    border-color: #bbb;
+  }
+  body.light-mode footer {
+    background: #f2f2f7;
+    color: #666;
+    border-top-color: #ccc;
+  }
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">SPACESECURITY</div>
+  <p class="tagline">Proteção pessoal ao alcance de um toque</p>
+</header>
+
+<nav>
+  <a href="#" id="navHome" class="active">Início</a>
+  <a href="#" id="navFeatures">Recursos</a>
+  <a href="#" id="navExamples">Exemplos</a>
+  <a href="#" id="navPlans">Planos</a>
+  <a href="#" id="navApp">Aplicativo</a>
+  <button id="themeToggle" aria-label="Alternar modo claro e escuro">Modo Claro</button>
+</nav>
+
+<main>
+  <!-- Conteúdo das abas -->
+  <section id="contentHome" class="tab-content active">
+    <div id="heroSection">
+      <h2>Sua Segurança em Primeiro Lugar</h2>
+      <p>O SPACESECURITY combina tecnologia vestível com segurança pessoal - GPS ativo, botão do pânico silencioso, detector de queda e alerta de emergência para situações de risco como sequestro, violência ou assédio.</p>
+      <button class="btn" id="openModalBtn">Mais Informações</button>
+    </div>
+  </section>
+
+  <section id="contentFeatures" class="tab-content">
+    <h3>Recursos do SPACESECURITY</h3>
+    <div class="services-grid" style="display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:1.5rem;">
+      <div class="service-card">
+        <h4>Botão do Pânico</h4>
+        <p>Ativação rápida que envia sua localização GPS e alerta para contatos de emergência e autoridades.</p>
+      </div>
+      <div class="service-card">
+        <h4>Rastreamento GPS</h4>
+        <p>Localização em tempo real e histórico de rotas para monitoramento constante de sua segurança.</p>
+      </div>
+      <div class="service-card">
+        <h4>Proteção Completa</h4>
+        <p>Monitoramento 24/7 com geofence, detector de movimentos bruscos, gravação automática de áudio em emergências e conexão direta com autoridades.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="contentExamples" class="tab-content">
+    <h3>Exemplos de Uso do SPACESECURITY</h3>
+    <p>O SPACESECURITY é um dispositivo de segurança pessoal desenvolvido para oferecer proteção rápida e discreta em qualquer pessoa em situação de risco.<br>
+      Com aparência de um relógio digital comum, ele camufla sua real função enquanto disponibiliza recursos de alerta, monitoramento e registro de provas para apoiar o usuário e facilitar a ação das autoridades.<br>
+      A seguir, alguns exemplos reais onde o SPACESECURITY faz a diferença:
+    </p>
+    <ul>
+      <li><strong>Idoso sozinho em casa:</strong> Um idoso sofre uma queda e não consegue alcançar o telefone. Com um clique, alerta familiares e envia localização exata.</li>
+      <li><strong>Mãe protegendo o filho:</strong> Uma mãe vê um homem estranho seguindo seu filho no parque. Aciona o botão e o GPS mostra a posição em tempo real aos contatos.</li>
+      <li><strong>Passageiro em transporte por aplicativo:</strong> Um adolescente percebe comportamento suspeito do motorista. Dois cliques enviam localização e áudio direto para a polícia.</li>
+      <li><strong>Mulher voltando do trabalho:</strong> Abordada por um desconhecido insistente, aciona o botão. O primeiro clique já grava a conversa e alerta amigos próximos.</li>
+      <li><strong>Corredor em rua deserta:</strong> Sente alguém correndo atrás dele. Pressiona o botão e aciona envio instantâneo de localização e áudio.</li>
+      <li><strong>Criança perdida em excursão:</strong> Sai do trajeto habitual e é localizada rapidamente pelo histórico de rotas no aplicativo.</li>
+      <li><strong>Violência doméstica:</strong> Durante uma agressão, a vítima aciona discretamente o botão. O áudio e a localização são enviados para contatos de confiança, garantindo registros para uso policial.</li>
+      <li><strong>Relacionamento abusivo:</strong> Aciona o dispositivo discretamente durante discussão. Áudio e localização ficam registrados para uso policial.</li>
+      <li><strong>Vítima de assalto:</strong> Obrigada a entregar o celular, pressiona o relógio duas vezes e envia pedido de ajuda silencioso à viatura mais próxima.</li>
+      <li><strong>Ciclista acidentado:</strong> O aumento súbito dos batimentos ativa alerta automático para contatos e aplicativo.</li>
+      <li><strong>Pessoa com deficiência auditiva:</strong> Percebe movimentação suspeita atrás de si e aciona botão para enviar localização aos familiares.</li>
+    </ul>
+  </section>
+
+  <section id="contentPlans" class="tab-content">
+    <h3>Planos</h3>
+    <p>Confira os planos disponíveis para usar o SPACESECURITY e garantir sua proteção 24/7.</p>
+    <ul>
+      <li>Plano Básico - Monitoramento via app e alertas para contatos cadastrados.</li>
+      <li>Plano Premium - Inclui monitoramento 24h, gravação automática e conexão direta com autoridades.</li>
+      <li>Plano Família - Proteção para até 4 dispositivos com histórico e relatórios detalhados.</li>
+    </ul>
+  </section>
+
+  <section id="contentApp" class="tab-content">
+    <h3>Aplicativo SPACESECURITY</h3>
+    <p>Controle e monitore seu dispositivo pelo aplicativo disponível para iOS e Android. Receba alertas, acompanhe rotas e comunique-se com serviços de emergência.</p>
+    <p><a href="#" class="btn">Baixe Agora</a></p>
+  </section>
+
+  <!-- Newsletter -->
+  <section id="newsletter">
+    <h3>Assine nossa Newsletter</h3>
+    <form id="newsletterForm">
+      <input type="email" id="emailInput" placeholder="Seu melhor e-mail" required aria-label="Seu melhor e-mail" />
+      <button type="submit">Assinar</button>
+    </form>
+    <p id="newsletterMsg" aria-live="polite" style="margin-top:1rem;"></p>
+  </section>
+</main>
+
+<!-- Modal com texto informativo -->
+<div id="modalOverlay" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-describedby="modalDesc">
+  <div id="modalContent">
+    <button id="modalCloseBtn" aria-label="Fechar modal">&times;</button>
+    <h3 id="modalTitle">SPACESECURITY: Proteção Discreta e Efetiva para Mulheres e Crianças</h3>
+    <p id="modalDesc">Em um mundo cada vez mais dinâmico, onde a segurança pessoal tornou-se uma preocupação constante, o SPACESECURITY chega para revolucionar a forma como mulheres e crianças se protegem em situações de risco. Pensado e desenvolvido especialmente para garantir proteção discreta, rápida e eficiente, o SPACESECURITY é um sistema de segurança pessoal que se apresenta como um relógio digital comum, com design moderno e neutro, para que ninguém perceba que ele é muito mais do que aparenta.</p>
+    <p>A tecnologia por trás do SPACESECURITY foi cuidadosamente projetada para atuar de forma silenciosa, garantindo que o usuário possa enviar um alerta de emergência sem chamar atenção, em momentos delicados em que qualquer exposição pode aumentar o perigo. Ao acionar o dispositivo, ele dispara um sinal imediato para contatos previamente cadastrados, além de poder alertar diretamente as autoridades ou serviços de emergência locais, acelerando o tempo de resposta e aumentando as chances de intervenção rápida.</p>
+    <p>Esse sistema não é apenas um gadget, mas um verdadeiro aliado na prevenção. Seu uso é indicado para mulheres que enfrentam rotinas com deslocamentos diários, trajetos à noite, encontros em locais pouco conhecidos, ou mesmo para mães que desejam garantir a segurança dos filhos quando eles estão sozinhos ou longe. Além disso, o SPACESECURITY é uma ferramenta essencial para crianças e adolescentes, oferecendo a tranquilidade que pais e responsáveis tanto desejam, com a certeza de que, em uma situação de emergência, um socorro está a um simples toque.</p>
+    <p>Com o SPACESECURITY, a segurança deixa de ser um conceito distante para se tornar uma realidade palpável, oferecendo autonomia, confiança e proteção para quem mais precisa. É a tranquilidade de saber que, mesmo em momentos difíceis, você não estará sozinha.</p>
+  </div>
+</div>
+
+<!-- Botão voltar ao topo -->
+<button id="backToTop" aria-label="Voltar ao topo">↑</button>
+
+<footer>
+  <div class="footer-section">
+    <div>
+      <h4>Links Rápidos</h4>
+      <a href="#">Início</a><br/>
+      <a href="#">Recursos</a><br/>
+      <a href="#">Exemplos</a><br/>
+      <a href="#">Planos</a><br/>
+      <a href="#">Aplicativo</a>
+    </div>
+    <div>
+      <h4>Créditos</h4>
+      <p>Maratona Tech</p>
+      <p>2° B Tec. (DS)</p>
+      <p>Autores:</p>
+      <ul style="list-style:none; padding-left:0; font-size: 0.9rem; color:#bbb;">
+        <li>Evellyn Natércia Soares Gomes</li>
+        <li>Lorhemy Victoria Lopes Torres</li>
+        <li>Maria Gabriele da Luz Ribeiro</li>
+        <li>Pietro Alexandre Belarmino Soares</li>
+        <li>Viviane Vitória Alves da Silva</li>
+      </ul>
+    </div>
+    <div>
+      <h4>Direitos Autorais</h4>
+      <p>© 2025 SPACESECURITY. Todos os direitos reservados.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  // Controle das abas
+  const tabs = ['Home', 'Features', 'Examples', 'Plans', 'App'];
+  tabs.forEach(tab => {
+    const link = document.getElementById('nav' + tab);
+    const content = document.getElementById('content' + tab);
+
+    link.addEventListener('click', e => {
+      e.preventDefault();
+      // Desativa todos
+      tabs.forEach(t => {
+        document.getElementById('nav' + t).classList.remove('active');
+        document.getElementById('content' + t).classList.remove('active');
+      });
+      // Ativa clicado
+      link.classList.add('active');
+      content.classList.add('active');
+      // Scroll to top ao trocar aba
+      window.scrollTo({top:0, behavior:'smooth'});
+    });
+  });
+
+  // Modal
+  const modalOverlay = document.getElementById('modalOverlay');
+  const modalCloseBtn = document.getElementById('modalCloseBtn');
+  const openModalBtn = document.getElementById('openModalBtn');
+
+  openModalBtn.addEventListener('click', () => {
+    modalOverlay.classList.add('active');
+    document.body.style.overflow = 'hidden'; // Bloqueia scroll da página
+  });
+
+  modalCloseBtn.addEventListener('click', () => {
+    modalOverlay.classList.remove('active');
+    document.body.style.overflow = ''; // Libera scroll
+  });
+
+  modalOverlay.addEventListener('click', e => {
+    if(e.target === modalOverlay) {
+      modalOverlay.classList.remove('active');
+      document.body.style.overflow = '';
+    }
+  });
+
+  // Modo claro/escuro
+  const themeToggleBtn = document.getElementById('themeToggle');
+  themeToggleBtn.addEventListener('click', () => {
+    document.body.classList.toggle('light-mode');
+    if(document.body.classList.contains('light-mode')){
+      themeToggleBtn.textContent = 'Modo Escuro';
+    } else {
+      themeToggleBtn.textContent = 'Modo Claro';
+    }
+  });
+
+  // Voltar ao topo
+  const backToTopBtn = document.getElementById('backToTop');
+  window.addEventListener('scroll', () => {
+    if(window.scrollY > 300) {
+      backToTopBtn.style.display = 'block';
+    } else {
+      backToTopBtn.style.display = 'none';
+    }
+  });
+  backToTopBtn.addEventListener('click', () => {
+    window.scrollTo({top:0, behavior:'smooth'});
+  });
+
+  // Newsletter - simulação de envio
+  const newsletterForm = document.getElementById('newsletterForm');
+  const emailInput = document.getElementById('emailInput');
+  const newsletterMsg = document.getElementById('newsletterMsg');
+
+  newsletterForm.addEventListener('submit', e => {
+    e.preventDefault();
+    const email = emailInput.value.trim();
+
+    if(email === '') {
+      newsletterMsg.textContent = 'Por favor, insira um e-mail válido.';
+      newsletterMsg.style.color = 'tomato';
+      return;
+    }
+
+    newsletterMsg.style.color = 'lightgreen';
+    newsletterMsg.textContent = 'Obrigado por assinar nossa newsletter!';
+    emailInput.value = '';
+  });
+</script>
+</body>
+</html>
